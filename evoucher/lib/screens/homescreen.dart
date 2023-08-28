@@ -31,11 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       body: const StatsScreen(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: const Icon(Icons.refresh),
-      //   backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
-      // ),
       bottomNavigationBar: CustomBottomNavBar(),
     );
   }
