@@ -1,5 +1,6 @@
 import 'package:evoucher/components/btmNavBar.dart';
 import 'package:evoucher/components/profile_item.dart';
+import 'package:evoucher/screens/login.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -51,6 +52,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     // _showDialog();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(200, 255, 0, 0),
