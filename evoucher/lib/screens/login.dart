@@ -66,16 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   obscureText: true,
                                 ),
-                                const SizedBox(height: 15),
-                                // const TextField(
-                                //   decoration: InputDecoration(
-                                //     labelText: "Confirm Password",
-                                //     hintText: "Confirm your password",
-                                //     border: OutlineInputBorder(),
-                                //   ),
-                                //   obscureText: true,
-                                // ),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 35),
                                 const Text(
                                   "By signing in, you agree to our Terms of Use and Privacy Policy",
                                   textAlign: TextAlign.center,
