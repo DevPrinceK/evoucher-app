@@ -3,8 +3,88 @@ import 'package:evoucher/components/statComponent.dart';
 import 'package:evoucher/consts/colors.dart';
 import 'package:flutter/material.dart';
 
-class StatsScreen extends StatelessWidget {
+class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
+
+  @override
+  State<StatsScreen> createState() => _StatsScreenState();
+}
+
+class _StatsScreenState extends State<StatsScreen> {
+  double get deviceWidth => MediaQuery.of(context).size.width;
+  // show success dialog
+  Future<void> _showSuccessDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 5,
+          title: const Text("Wallet Credited!"),
+          content: SizedBox(
+            height: 300,
+            width: deviceWidth * 0.8,
+            child: Column(
+              children: [
+                Image.asset("assets/images/success-check.png"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // show dialog to credit account
+  Future<void> _showDialog() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Add Funds"),
+            content: SizedBox(
+              width: deviceWidth * 0.8,
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Enter Amount"),
+                  SizedBox(height: 10),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Amount',
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text("Enter Card Number"),
+                  SizedBox(height: 10),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Card Number',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("Cancel"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _showSuccessDialog();
+                },
+                child: const Text("Add"),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +113,7 @@ class StatsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 20),
+                  padding: const EdgeInsets.only(left: 50, right: 40),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -44,19 +124,23 @@ class StatsScreen extends StatelessWidget {
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
-                      // IconButton(
-                      //   onPressed: () {},
-                      //   icon: const Icon(
-                      //     Icons.add_box_outlined,
-                      //     color: Colors.white,
-                      //     size: 30,
-                      //   ),
-                      // )
-                      // SizedBox(width: 20),
-                      Spacer(),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text("Add Funds"),
+                      const Spacer(),
+                      SizedBox(
+                        height: 35,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            // backgroundColor:
+                            //     const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            // display an alert dialog with two textinput field to add funds
+                            _showDialog();
+                          },
+                          child: const Text("+ Add Funds"),
+                        ),
                       )
                     ],
                   ),
