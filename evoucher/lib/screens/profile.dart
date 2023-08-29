@@ -1,6 +1,10 @@
 import 'package:evoucher/components/btmNavBar.dart';
 import 'package:evoucher/components/profile_item.dart';
+import 'package:evoucher/screens/delete_account.dart';
+import 'package:evoucher/screens/homescreen.dart';
 import 'package:evoucher/screens/login.dart';
+import 'package:evoucher/screens/profile_settings.dart';
+import 'package:evoucher/screens/withdraw_funds.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -41,10 +45,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 "mohammedfahd@gmail.com",
               ),
               const SizedBox(height: 20),
-              const PrilfeItem(title: "Profile Settings"),
-              const PrilfeItem(title: "Cash Withdrawal"),
-              const PrilfeItem(title: "Add Funds"),
-              const PrilfeItem(title: "Delete Account"),
+              const PrilfeItem(
+                title: "Profile Settings",
+                NavScreen: ProfileSettingsScreen(),
+              ),
+              const PrilfeItem(
+                title: "Cash Withdrawal",
+                NavScreen: WithdrawFundScreen(),
+              ),
+              const PrilfeItem(
+                title: "Add Funds",
+                NavScreen: HomeScreen(),
+              ),
+              const PrilfeItem(
+                title: "Delete Account",
+                NavScreen: DeleteAccountScreen(),
+              ),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
