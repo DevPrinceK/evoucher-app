@@ -42,6 +42,23 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               ),
               const SizedBox(height: 20),
               const Spacer(),
+              Column(
+                children: [
+                  Image.asset(
+                    'assets/images/warning.png',
+                    height: 100,
+                  ),
+                  const Text("This action cannot be reverted!"),
+                  const Text(
+                    "All your data will be deleted!",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
               SizedBox(
                 width: double.infinity,
                 height: 55,
