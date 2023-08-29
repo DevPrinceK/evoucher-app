@@ -2,23 +2,23 @@ import 'package:evoucher/components/btmNavBar.dart';
 import 'package:flutter/material.dart';
 
 class VoucherDetailScreen extends StatelessWidget {
-  final String eventName;
-  final String eventID;
-  final String eventDate;
-  final String eventCreator;
+  final String voucherName;
+  final String voucherID;
+  final String voucherDate;
+  final String voucherCreator;
   const VoucherDetailScreen({
     super.key,
-    required this.eventName,
-    required this.eventID,
-    required this.eventDate,
-    required this.eventCreator,
+    required this.voucherName,
+    required this.voucherID,
+    required this.voucherDate,
+    required this.voucherCreator,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(eventName),
+        title: Text(voucherName),
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
       body: Padding(
@@ -33,13 +33,13 @@ class VoucherDetailScreen extends StatelessWidget {
                 children: [
                   const Text("Voucher ID"),
                   const Text(
-                    "EV20230819140345716900",
+                    "EV202308191403",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Event Name"),
                   Text(
-                    eventName,
+                    voucherName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -55,13 +55,13 @@ class VoucherDetailScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  const Text("Redeemer Name"),
+                  const Text("Creator Name"),
                   const Text(
                     "Prince Samuel",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  const Text("Redeemer Email"),
+                  const Text("Creator Email"),
                   const Text(
                     "princesamuelpks@gmail.com",
                     style: TextStyle(fontWeight: FontWeight.bold),
