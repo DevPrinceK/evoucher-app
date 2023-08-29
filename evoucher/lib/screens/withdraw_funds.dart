@@ -1,15 +1,15 @@
 import 'package:evoucher/components/btmNavBar.dart';
 import 'package:flutter/material.dart';
 
-class WidthdrawFundScreen extends StatefulWidget {
-  const WidthdrawFundScreen({Key? key}) : super(key: key);
+class WithdrawFundScreen extends StatefulWidget {
+  const WithdrawFundScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _WidthdrawFundScreenState createState() => _WidthdrawFundScreenState();
+  _WithdrawFundScreenState createState() => _WithdrawFundScreenState();
 }
 
-class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
+class _WithdrawFundScreenState extends State<WithdrawFundScreen> {
   double get deviceWidth => MediaQuery.of(context).size.width;
 
   // show dialog
@@ -19,7 +19,7 @@ class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           elevation: 5,
-          title: const Text("Funds Added!"),
+          title: const Text("Withdrawal Successful!"),
           content: SizedBox(
             height: 300,
             width: deviceWidth * 0.8,
@@ -38,7 +38,7 @@ class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Funds"),
+        title: const Text("Withdraw Funds"),
         centerTitle: true,
         elevation: 0,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
@@ -50,7 +50,7 @@ class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
-                elevation: 5,
+                elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       bottom: 20, left: 10, right: 10, top: 10),
@@ -65,6 +65,13 @@ class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
                       const TextField(
                         decoration: InputDecoration(
                           hintText: "Amount",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const TextField(
+                        decoration: InputDecoration(
+                          hintText: "Account Number",
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -86,7 +93,7 @@ class _WidthdrawFundScreenState extends State<WidthdrawFundScreen> {
                           onPressed: () {
                             _showDialog();
                           },
-                          child: const Text("Add Event"),
+                          child: const Text("Withdraw Funds"),
                         ),
                       )
                     ],
