@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 
 class PrilfeItem extends StatelessWidget {
   final String title;
-  const PrilfeItem({super.key, required this.title});
+  final Widget NavScreen;
+  const PrilfeItem({
+    super.key,
+    required this.title,
+    required this.NavScreen,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => NavScreen));
+      },
       child: Card(
         child: Container(
           height: 60,
