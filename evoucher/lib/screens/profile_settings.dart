@@ -1,5 +1,4 @@
 import 'package:evoucher/components/btmNavBar.dart';
-import 'package:evoucher/components/profile_item.dart';
 import 'package:evoucher/screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -19,56 +18,66 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 60,
-                child: Image.asset('assets/images/profile.png'),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                "Fahd Mohammed",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              Center(
+                child: CircleAvatar(
+                  radius: 60,
+                  child: Image.asset('assets/images/profile.png'),
                 ),
               ),
-              const Text(
-                "mohammedfahd@gmail.com",
+              const SizedBox(height: 10),
+              const Center(
+                child: Text(
+                  "Fahd Mohammed",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              const Center(
+                child: Text(
+                  "mohammedfahd@gmail.com",
+                ),
               ),
               const SizedBox(height: 20),
-              const Spacer(),
-              SizedBox(
+              // Text("Fullname", textAlign: ),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  Text("Fullname"),
+                  TextField(),
+                  SizedBox(height: 30),
+                  Text("Email"),
+                  TextField(),
+                  SizedBox(height: 20),
+                  Text("Profile Image"),
+                  TextField(),
+                  SizedBox(height: 20),
+                ],
+              ),
+              const SizedBox(height: 40),
+              Container(
                 width: double.infinity,
-                height: 55,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // _showDialog();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginScreen()));
-                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(150, 0, 255, 0),
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    "Save Settings",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: Text("Save Settings"),
+                  onPressed: () {},
                 ),
               ),
-              const SizedBox(height: 40),
             ],
           ),
         ),
