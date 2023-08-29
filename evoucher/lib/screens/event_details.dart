@@ -31,22 +31,10 @@ class EventDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Voucher ID"),
-                  const Text(
-                    "EV20230819140345716900",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
                   const Text("Event Name"),
                   Text(
                     eventName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text("Amount"),
-                  const Text(
-                    "45.00",
-                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Date"),
@@ -55,13 +43,13 @@ class EventDetailScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  const Text("Redeemer Name"),
+                  const Text("Creator Name"),
                   const Text(
                     "Prince Samuel",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  const Text("Redeemer Email"),
+                  const Text("Creator Email"),
                   const Text(
                     "princesamuelpks@gmail.com",
                     style: TextStyle(fontWeight: FontWeight.bold),
