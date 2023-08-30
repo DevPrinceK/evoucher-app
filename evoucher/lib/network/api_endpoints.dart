@@ -4,5 +4,7 @@ class APIEndpoints {
   static const String login = "${baseUrl}login/";
   static const String logout = "${baseUrl}logout/";
   static const String stats = "${baseUrl}stats/";
-  final String events = "all-events";
+  static const String creditWallet = "${baseUrl}credit-wallet/";
+  static const String debitWallet = "${baseUrl}debit-wallet/";
+  static const String events = "${baseUrl}cud-event/";
 }
