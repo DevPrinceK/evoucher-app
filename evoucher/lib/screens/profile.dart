@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _userEmail = "mohammedfahd@gmail.com";
   String _userFullname = "Mohammed Fahd";
   String _userRole = "APP_USER";
+
   // logout user
   Future<int> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
