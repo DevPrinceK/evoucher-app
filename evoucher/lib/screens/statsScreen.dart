@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:evoucher/components/statComponent.dart';
 // ignore: unused_import
 import 'package:evoucher/consts/colors.dart';
@@ -16,6 +18,8 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
+  // amount controller
+  TextEditingController amountController = TextEditingController();
   // get device width
   double get deviceWidth => MediaQuery.of(context).size.width;
   // stats data
@@ -30,6 +34,26 @@ class _StatsScreenState extends State<StatsScreen> {
 
   // flags
   bool isReloading = false;
+
+  // credit user's wallet
+  Future<int> credit_wallet(amount) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.creditWallet);
+    var response = await http.post(url, headers: {
+      // "Content-Type": "application/json",
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "amount": amount.toString(),
+    });
+    if (response.statusCode == 200) {
+      print("Wallet Funded");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return 200;
+  }
 
   // get stats from the api
   Future<void> getStats(bool reload) async {
@@ -53,12 +77,6 @@ class _StatsScreenState extends State<StatsScreen> {
         "Authorization": "Token ${token.toString()}",
       },
     );
-
-    if (reload == true) {
-      setState(() {
-        isReloading = false;
-      });
-    }
 
     if (response.statusCode == 200) {
       print("Stats Fetched Successfully");
@@ -108,22 +126,23 @@ class _StatsScreenState extends State<StatsScreen> {
             title: const Text("Add Funds"),
             content: SizedBox(
               width: deviceWidth * 0.8,
-              child: const Column(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Enter Amount"),
-                  SizedBox(height: 10),
+                  const Text("Enter Amount"),
+                  const SizedBox(height: 10),
                   TextField(
-                    decoration: InputDecoration(
+                    controller: amountController,
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Amount',
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text("Enter Card Number"),
-                  SizedBox(height: 10),
-                  TextField(
+                  const SizedBox(height: 10),
+                  const Text("Enter Card Number"),
+                  const SizedBox(height: 10),
+                  const TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Card Number',
@@ -140,9 +159,20 @@ class _StatsScreenState extends State<StatsScreen> {
                 child: const Text("Cancel"),
               ),
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _showSuccessDialog();
+                onPressed: () async {
+                  // credit wallet
+                  var res =
+                      await credit_wallet(double.parse(amountController.text));
+                  if (res == 200) {
+                    print("Wallet Funded");
+                    Navigator.of(context).pop();
+                    _showSuccessDialog();
+                    return;
+                  } else {
+                    print("Wallet Funding Failed");
+                    Navigator.of(context).pop();
+                    return;
+                  }
                 },
                 child: const Text("Add"),
               ),
