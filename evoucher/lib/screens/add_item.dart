@@ -1,5 +1,10 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import http package and convert dart file
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AddItemScreen extends StatefulWidget {
   const AddItemScreen({Key? key}) : super(key: key);
@@ -10,8 +15,9 @@ class AddItemScreen extends StatefulWidget {
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
-  DateTime _selectedDate = DateTime.now();
   double get deviceWidth => MediaQuery.of(context).size.width;
+  DateTime _selectedDate = DateTime.now();
+  TextEditingController eventNameController = TextEditingController();
 
   final List<dynamic> events = [
     {
@@ -35,6 +41,26 @@ class _AddItemScreenState extends State<AddItemScreen> {
       "event_id": "evid#55555",
     },
   ];
+
+  // add events
+  Future<int> add_event(name, date) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.events);
+    var response = await http.post(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "name": name.toString(),
+      "date": date.toString(),
+    });
+    if (response.statusCode == 201) {
+      print("Event Added Successfully");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -98,8 +124,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     children: [
                       const Text("Add Event", style: TextStyle(fontSize: 20)),
                       const SizedBox(height: 5),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: eventNameController,
+                        decoration: const InputDecoration(
                           hintText: "Event Name",
                           border: OutlineInputBorder(),
                         ),
@@ -138,8 +165,23 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            _showDialog();
+                          onPressed: () async {
+                            var res = await add_event(
+                              eventNameController.text,
+                              _selectedDate.toString(),
+                            );
+                            if (res == 201 || res == 200) {
+                              await _showDialog();
+                              return;
+                            } else {
+                              print("Error");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Couldn't add event"),
+                                ),
+                              );
+                              return;
+                            }
                           },
                           child: const Text("Add Event"),
                         ),
