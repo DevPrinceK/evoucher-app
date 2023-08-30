@@ -1,5 +1,10 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+// import http package and convert dart file
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class WithdrawFundScreen extends StatefulWidget {
   const WithdrawFundScreen({Key? key}) : super(key: key);
@@ -11,6 +16,28 @@ class WithdrawFundScreen extends StatefulWidget {
 
 class _WithdrawFundScreenState extends State<WithdrawFundScreen> {
   double get deviceWidth => MediaQuery.of(context).size.width;
+  // amount controller
+  TextEditingController amountController = TextEditingController();
+
+  // credit user's wallet
+  Future<int> debit_wallet(amount) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.debitWallet);
+    var response = await http.post(url, headers: {
+      // "Content-Type": "application/json",
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "amount": amount.toString(),
+    });
+    if (response.statusCode == 200) {
+      print("Wallet Debited Successfully");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return 200;
+  }
 
   // show dialog
   Future<void> _showDialog() async {
@@ -62,8 +89,9 @@ class _WithdrawFundScreenState extends State<WithdrawFundScreen> {
                         style: TextStyle(fontSize: 20),
                       ),
                       const SizedBox(height: 5),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextField(
+                        controller: amountController,
+                        decoration: const InputDecoration(
                           hintText: "Amount",
                           border: OutlineInputBorder(),
                         ),
@@ -90,8 +118,24 @@ class _WithdrawFundScreenState extends State<WithdrawFundScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            _showDialog();
+                          onPressed: () async {
+                            var res = await debit_wallet(
+                              double.parse(amountController.text),
+                            );
+                            if (res == 200) {
+                              print("Wallet Debited Successfully");
+                              _showDialog();
+                              return;
+                            } else {
+                              print("Wallet Debited Failed");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  content: Text("Wallet Debited Failed"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
                           },
                           child: const Text("Withdraw Funds"),
                         ),
