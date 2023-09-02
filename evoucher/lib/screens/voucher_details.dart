@@ -1,7 +1,11 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class VoucherDetailScreen extends StatelessWidget {
+class VoucherDetailScreen extends StatefulWidget {
   final String voucherName;
   final String voucherID;
   final String voucherDate;
@@ -15,10 +19,35 @@ class VoucherDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<VoucherDetailScreen> createState() => _VoucherDetailScreenState();
+}
+
+class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
+  String userRole = "APP_USER";
+
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(voucherName),
+        title: Text(widget.voucherName),
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
       body: Padding(
@@ -39,7 +68,7 @@ class VoucherDetailScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   const Text("Event Name"),
                   Text(
-                    voucherName,
+                    widget.voucherName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -73,15 +102,41 @@ class VoucherDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () {},
-        child: const Icon(
-          Icons.delete,
-          color: Colors.white,
-        ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            backgroundColor: Colors.green,
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Broadcasting Voucher ..."),
+                ),
+              );
+            },
+            child: const Icon(
+              Icons.share_outlined,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton(
+            backgroundColor: Colors.red,
+            onPressed: () {},
+            child: const Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 2),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 0)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 0,
+                )
+              : RestaurantNavBar(selectedIndex: 0),
     );
   }
 }
