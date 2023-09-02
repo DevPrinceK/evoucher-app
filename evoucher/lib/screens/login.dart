@@ -70,6 +70,47 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // signup user
+  Future<int> _signUpUser(fullname, email, passowrd, role) async {
+    // initialize shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Make API call
+    var url = Uri.parse(APIEndpoints.signup);
+    var response = await http.post(
+      url,
+      body: {
+        "fullname": fullname,
+        "email": email,
+        "password": passowrd,
+        "role": role,
+      },
+    );
+
+    if (response.statusCode == 201) {
+      // User created
+      print("User account created");
+      var data = jsonDecode(response.body);
+      var userData = data["user"];
+      var token = data["token"];
+      print(userData);
+      print(token);
+      // Save token and user info
+      await prefs.setString("token", data["token"]);
+      await prefs.setString("fullname", userData["fullname"]);
+      await prefs.setString("email", userData["email"]);
+      await prefs.setString("role", userData["role"]);
+      print(response.statusCode);
+      return response.statusCode;
+    } else {
+      // Login failed
+      print("Login failed");
+      print(response.statusCode);
+      print(response.reasonPhrase);
+      return response.statusCode;
+    }
+  }
+
   // BOTTOM SHEET
   Future<void> _showBottomSheet(BuildContext context, int indx) async {
     await showModalBottomSheet<void>(
@@ -298,7 +339,50 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: 60,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    String fullName = _fullnameController.text;
+                                    String userEmail =
+                                        _emailSignupController.text;
+                                    String password1 =
+                                        _passwordSignupController.text;
+                                    String password2 =
+                                        _confirmPasswordController.text;
+                                    String userRole = role;
+                                    if (password1 == password2) {
+                                      var res = await _signUpUser(
+                                          fullName,
+                                          userEmail,
+                                          password1,
+                                          role = userRole);
+                                      if (res == 201) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen(),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Couldn't Signup User"),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      return;
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text("Passwords Mismatch"),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                  },
                                   child: const Text(
                                     "Signup",
                                     style: TextStyle(fontSize: 20),
