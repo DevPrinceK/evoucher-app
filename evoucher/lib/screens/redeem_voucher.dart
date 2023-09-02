@@ -123,12 +123,12 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
         ),
       ),
       bottomNavigationBar: userRole == "APP_USER"
-          ? AppUserNavBar(selectedIndex: 3)
+          ? AppUserNavBar(selectedIndex: 0)
           : userRole == "ORGANIZER"
-              ? OrganazinerNavBar(
-                  selectedIndex: 3,
+              ? const OrganazinerNavBar(
+                  selectedIndex: 0,
                 )
-              : RestaurantNavBar(selectedIndex: 3),
+              : const RestaurantNavBar(selectedIndex: 1),
     );
   }
 }
