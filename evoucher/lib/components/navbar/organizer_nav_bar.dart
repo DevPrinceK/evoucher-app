@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:evoucher/screens/add_item.dart';
 import 'package:evoucher/screens/homescreen.dart';
@@ -8,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OrganazinerNavBar extends StatefulWidget {
   final int selectedIndex;
-  OrganazinerNavBar({
+  const OrganazinerNavBar({
     super.key,
     this.selectedIndex = 0,
   });
