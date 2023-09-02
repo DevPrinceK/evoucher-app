@@ -1,6 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:evoucher/components/profile_item.dart';
 import 'package:evoucher/network/api_endpoints.dart';
 import 'package:evoucher/screens/delete_account.dart';
@@ -27,6 +30,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _userFullname = "Mohammed Fahd";
   String _userRole = "APP_USER";
 
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
   // logout user
   Future<int> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,6 +60,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (response.statusCode == 204) {
       print("Logout Successful");
       print("Status Code: ${response.statusCode}");
+      prefs.remove("role");
+      prefs.remove("token");
+      prefs.remove("fullname");
+      prefs.remove("email");
       return response.statusCode;
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -55,6 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     getProfileInfo();
+    getUserRole();
   }
 
   void getProfileInfo() async {
@@ -168,7 +189,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 4),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 4)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 4,
+                )
+              : RestaurantNavBar(selectedIndex: 4),
     );
   }
 }
