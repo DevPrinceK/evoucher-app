@@ -1,8 +1,12 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
 import 'package:evoucher/components/navbar/restaurant_navbar.dart';
+import 'package:evoucher/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class RedeemVoucherScreen extends StatefulWidget {
   const RedeemVoucherScreen({super.key});
@@ -13,6 +17,10 @@ class RedeemVoucherScreen extends StatefulWidget {
 
 class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
   double get deviceWidth => MediaQuery.of(context).size.width;
+
+  final TextEditingController _voucherCodeController = TextEditingController();
+  final TextEditingController _redeemerEmailController =
+      TextEditingController();
 
   String userRole = "APP_USER";
   // Get the user role from shared preferences
@@ -27,6 +35,26 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
     print("Role After setState(): $userRole");
   }
 
+  // add events
+  Future<int> redeemVoucher(voucherId, redeemerEmail) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.redeemVouchers);
+    var response = await http.post(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "voucher_id": voucherId.toString(),
+      "redeemer_email": redeemerEmail.toString(),
+    });
+    if (response.statusCode == 200) {
+      print("Voucher Redeemed!");
+    } else {
+      print("Error redeeming voucher ${response.statusCode}")
+    }
+    return response.statusCode;
+  }
+
   // show dialog
   Future<void> _showDialog() async {
     await showDialog(
@@ -34,7 +62,7 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           elevation: 5,
-          title: const Text("Voucher Verifiied!"),
+          title: const Text("Voucher Redeemed!"),
           content: SizedBox(
             height: 300,
             width: deviceWidth * 0.8,
@@ -79,15 +107,17 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _voucherCodeController,
+                  decoration: const InputDecoration(
                     hintText: "Voucher Code",
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 15),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _redeemerEmailController,
+                  decoration: const InputDecoration(
                     hintText: "Redeemer Email",
                     border: OutlineInputBorder(),
                   ),
@@ -98,8 +128,19 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async{
+                      var res = await redeemVoucher(
+                          _voucherCodeController.text,
+                          _redeemerEmailController.text);
+                      if (res == 200){
                       _showDialog();
+                      } else{
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Error Redeeming Voucher"),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
