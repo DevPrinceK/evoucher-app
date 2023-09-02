@@ -11,4 +11,5 @@ class APIEndpoints {
   static const String vouchers = "${baseUrl}cud-voucher/";
   static const String allEvents = "${baseUrl}all-events/";
   static const String allVouchers = "${baseUrl}all-vouchers/";
+  static const String redeemVouchers = "${baseUrl}redeem-voucher/";
 }
