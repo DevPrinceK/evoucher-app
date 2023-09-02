@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, unused_import
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, unused_import, sized_box_for_whitespace
 
 import 'package:evoucher/components/btmNavBar.dart';
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
@@ -345,7 +345,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ? OrganazinerNavBar(
                   selectedIndex: 1,
                 )
-              : RestaurantNavBar(selectedIndex: 1),
+              : const RestaurantNavBar(selectedIndex: 1),
     );
   }
 }
