@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print, unused_element
 
 // ignore: unused_import
 import 'package:evoucher/consts/colors.dart';
@@ -20,8 +20,6 @@ class RestaurantUserStatsScreen extends StatefulWidget {
 class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
   // get device width
   double get deviceWidth => MediaQuery.of(context).size.width;
-  // stats data
-  Map<String, dynamic> createdData = {};
 
   // firstname
   String firstName = "";
@@ -29,8 +27,10 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
   // flags
   bool isReloading = false;
 
+  List<dynamic> allVouchers = [];
+
   // get stats from the api
-  Future<void> getEvents(bool reload) async {
+  Future<void> getVouchers(bool reload) async {
     if (reload == true) {
       setState(() {
         isReloading = true;
@@ -43,7 +43,7 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
     List<String> nameParts = fullname!.split(" ");
     firstName = nameParts[0];
 
-    var url = Uri.parse(APIEndpoints.stats);
+    var url = Uri.parse(APIEndpoints.redeemVouchers);
     var response = await http.get(
       url,
       headers: {
@@ -54,11 +54,12 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
 
     if (response.statusCode == 200) {
       print("Vouchers Fetched Successfully");
-      var data = jsonDecode(response.body)["stats"];
+      var data = jsonDecode(response.body)["vouchers"];
       setState(() {
-        createdData = data["created"];
+        allVouchers = data;
       });
-      print(createdData);
+      print("all vouchers");
+      print(allVouchers);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -133,7 +134,7 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
   @override
   initState() {
     super.initState();
-    getEvents(false);
+    getVouchers(false);
   }
 
   @override
@@ -188,7 +189,7 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
                         const Spacer(),
                         IconButton(
                           onPressed: () {
-                            getEvents(true);
+                            getVouchers(true);
                             // Snackbar
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
@@ -202,7 +203,70 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 90),
+                    const SizedBox(height: 20),
+                    Column(
+                      children: [
+                        for (var voucher in allVouchers)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/event.png",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          voucher["voucher"]["voucher_id"],
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          voucher["voucher"]["voucher_type"],
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      voucher["voucher"]["amount"].toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ],
                 ),
               ),
