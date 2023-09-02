@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, avoid_print
 
-import 'package:evoucher/components/btmNavBar.dart';
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
 import 'package:evoucher/components/navbar/restaurant_navbar.dart';
