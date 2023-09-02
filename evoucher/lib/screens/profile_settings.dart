@@ -70,7 +70,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              // Text("Fullname", textAlign: ),
               const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,9 +78,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   TextField(),
                   SizedBox(height: 30),
                   Text("Email"),
-                  TextField(),
-                  SizedBox(height: 20),
-                  Text("Profile Image"),
                   TextField(),
                   SizedBox(height: 20),
                 ],
