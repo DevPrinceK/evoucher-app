@@ -1,7 +1,11 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class EventDetailScreen extends StatelessWidget {
+class EventDetailScreen extends StatefulWidget {
   final String eventName;
   final String eventID;
   final String eventDate;
@@ -15,10 +19,34 @@ class EventDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<EventDetailScreen> createState() => _EventDetailScreenState();
+}
+
+class _EventDetailScreenState extends State<EventDetailScreen> {
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(eventName),
+        title: Text(widget.eventName),
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
       body: Padding(
@@ -33,7 +61,7 @@ class EventDetailScreen extends StatelessWidget {
                 children: [
                   const Text("Event Name"),
                   Text(
-                    eventName,
+                    widget.eventName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -70,7 +98,13 @@ class EventDetailScreen extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 2),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 2)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 2,
+                )
+              : RestaurantNavBar(selectedIndex: 2),
     );
   }
 }
