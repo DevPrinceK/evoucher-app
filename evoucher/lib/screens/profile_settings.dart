@@ -1,8 +1,8 @@
-import 'package:evoucher/components/btmNavBar.dart';
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
 import 'package:evoucher/components/navbar/restaurant_navbar.dart';
-import 'package:evoucher/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
