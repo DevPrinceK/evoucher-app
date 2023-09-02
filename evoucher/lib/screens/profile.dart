@@ -188,12 +188,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       bottomNavigationBar: userRole == "APP_USER"
-          ? AppUserNavBar(selectedIndex: 4)
+          ? AppUserNavBar(selectedIndex: 1)
           : userRole == "ORGANIZER"
-              ? OrganazinerNavBar(
-                  selectedIndex: 4,
+              ? const OrganazinerNavBar(
+                  selectedIndex: 3,
                 )
-              : RestaurantNavBar(selectedIndex: 4),
+              : const RestaurantNavBar(selectedIndex: 2),
     );
   }
 }
