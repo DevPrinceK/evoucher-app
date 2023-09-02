@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:evoucher/network/api_endpoints.dart';
 import 'package:evoucher/screens/homescreen.dart';
@@ -17,14 +17,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  TextEditingController _emailSignupController = TextEditingController();
-  TextEditingController _fullnameController = TextEditingController();
-  TextEditingController _passwordSignupController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _userController = TextEditingController();
+  final TextEditingController _emailSignupController = TextEditingController();
+  final TextEditingController _fullnameController = TextEditingController();
+  final TextEditingController _passwordSignupController =
+      TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String role = "APP_USER";
   bool invalidEmailPassword = false;
