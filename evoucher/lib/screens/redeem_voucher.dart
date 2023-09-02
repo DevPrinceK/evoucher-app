@@ -50,7 +50,7 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
     if (response.statusCode == 200) {
       print("Voucher Redeemed!");
     } else {
-      print("Error redeeming voucher ${response.statusCode}")
+      print("Error redeeming voucher ${response.statusCode}");
     }
     return response.statusCode;
   }
@@ -128,13 +128,12 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
                   width: double.infinity,
                   height: 55,
                   child: ElevatedButton(
-                    onPressed: () async{
-                      var res = await redeemVoucher(
-                          _voucherCodeController.text,
+                    onPressed: () async {
+                      var res = await redeemVoucher(_voucherCodeController.text,
                           _redeemerEmailController.text);
-                      if (res == 200){
-                      _showDialog();
-                      } else{
+                      if (res == 200) {
+                        _showDialog();
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Error Redeeming Voucher"),
