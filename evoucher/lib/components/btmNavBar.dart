@@ -5,8 +5,9 @@ import 'package:evoucher/screens/items_list.dart';
 import 'package:evoucher/screens/redeem_voucher.dart';
 import 'package:evoucher/screens/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomBottomNavBar extends StatelessWidget {
+class CustomBottomNavBar extends StatefulWidget {
   final int selectedIndex;
   CustomBottomNavBar({
     super.key,
@@ -14,9 +15,37 @@ class CustomBottomNavBar extends StatelessWidget {
   });
 
   @override
+  State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
+}
+
+class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+  String userRole = "APP_USER";
+  List<Widget> navItems = [];
+
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
+  // set the right nav items based on the user role
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
-      index: selectedIndex,
+      index: widget.selectedIndex,
       height: 70,
       backgroundColor: Colors.transparent,
       buttonBackgroundColor: Colors.transparent,
