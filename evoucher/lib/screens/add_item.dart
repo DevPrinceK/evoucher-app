@@ -1,6 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names, unused_import
 
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:evoucher/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +30,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
   String selectedVoucherType = "SILVER";
   TextEditingController amountController = TextEditingController();
 
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+  }
+
   // add events
   Future<int> add_event(name, date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,10 +54,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       "date": date.toString(),
     });
     if (response.statusCode == 201) {
-      print("Event Added Successfully");
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    } else {}
     return response.statusCode;
   }
 
@@ -61,10 +72,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       "event_id": event,
     });
     if (response.statusCode == 201) {
-      print("Voucher Added Successfully");
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    } else {}
     return response.statusCode;
   }
 
@@ -83,10 +91,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       setState(() {
         allEvents = events;
       });
-      print(allEvents);
-    } else {
-      print('Request failed with status: ${response.statusCode}.');
-    }
+    } else {}
     return response.statusCode;
   }
 
@@ -208,7 +213,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               await _showDialog();
                               return;
                             } else {
-                              print("Error");
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Couldn't add event"),
@@ -335,7 +339,13 @@ class _AddItemScreenState extends State<AddItemScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 1),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 1)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 1,
+                )
+              : RestaurantNavBar(selectedIndex: 1),
     );
   }
 }
