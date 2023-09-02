@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:evoucher/components/btmNavBar.dart';
 import 'package:evoucher/network/api_endpoints.dart';
 import 'package:flutter/material.dart';
@@ -19,28 +21,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
   DateTime _selectedDate = DateTime.now();
   TextEditingController eventNameController = TextEditingController();
 
-  final List<dynamic> events = [
-    {
-      "name": "Event name 1",
-      "event_id": "evid#11111",
-    },
-    {
-      "name": "Event name 2",
-      "event_id": "evid#22222",
-    },
-    {
-      "name": "Event name 3",
-      "event_id": "evid#33333",
-    },
-    {
-      "name": "Event name 4",
-      "event_id": "evid#44444",
-    },
-    {
-      "name": "Event name 5",
-      "event_id": "evid#55555",
-    },
-  ];
+  // all events fetched
+  List<dynamic> allEvents = [];
+  String selectedEventID = "-1";
+  String selectedVoucherType = "SILVER";
+  TextEditingController amountController = TextEditingController();
 
   // add events
   Future<int> add_event(name, date) async {
@@ -56,6 +41,49 @@ class _AddItemScreenState extends State<AddItemScreen> {
     });
     if (response.statusCode == 201) {
       print("Event Added Successfully");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
+
+  // create voucher
+  Future<int> create_voucher(amount, voucherType, event) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.vouchers);
+    var response = await http.post(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "amount": amount,
+      "voucher_type": voucherType,
+      "event_id": event,
+    });
+    if (response.statusCode == 201) {
+      print("Voucher Added Successfully");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
+
+  // get events
+  Future<int> get_events() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.allEvents);
+    var response = await http.get(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    });
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      var events = data["events"];
+      setState(() {
+        allEvents = events;
+      });
+      print(allEvents);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -97,6 +125,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    get_events();
   }
 
   @override
@@ -201,10 +235,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     children: [
                       const Text("Add Voucher", style: TextStyle(fontSize: 20)),
                       const SizedBox(height: 5),
-                      const TextField(
-                        keyboardType: TextInputType.numberWithOptions(
+                      TextField(
+                        controller: amountController,
+                        keyboardType: const TextInputType.numberWithOptions(
                             decimal: true, signed: false),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Amount",
                           border: OutlineInputBorder(),
                         ),
@@ -231,6 +266,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         ],
                         onChanged: (value) {
                           // Handle dropdown value change
+                          setState(() {
+                            selectedVoucherType = value.toString();
+                          });
                         },
                       ),
                       const SizedBox(height: 15),
@@ -239,22 +277,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           labelText: "Select Event",
                           border: OutlineInputBorder(),
                         ),
-                        items: [
-                          DropdownMenuItem(
-                            value: events[0]["event_id"],
-                            child: Text(events[0]["name"]),
-                          ),
-                          DropdownMenuItem(
-                            value: events[1]["event_id"],
-                            child: Text(events[1]["name"]),
-                          ),
-                          DropdownMenuItem(
-                            value: events[2]["event_id"],
-                            child: Text(events[2]["name"]),
-                          ),
-                        ],
+                        items: allEvents.map<DropdownMenuItem<String>>((event) {
+                          return DropdownMenuItem<String>(
+                            value: event["id"].toString(),
+                            child: Text(event["name"]),
+                          );
+                        }).toList(),
                         onChanged: (value) {
                           // Handle dropdown value change
+                          setState(() {
+                            selectedEventID = value.toString();
+                          });
                         },
                       ),
                       const SizedBox(height: 15),
@@ -272,8 +305,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {
-                            _showDialog();
+                          onPressed: () async {
+                            var res = await create_voucher(
+                              amountController.text,
+                              selectedVoucherType,
+                              selectedEventID,
+                            );
+                            if (res == 201) {
+                              _showDialog();
+                              return;
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Couldn't Add Voucher"),
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                ),
+                              );
+                            }
                           },
                           child: const Text("Add VOucher"),
                         ),
