@@ -14,4 +14,5 @@ class APIEndpoints {
   static const String allVouchers = "${baseUrl}all-vouchers/";
   static const String redeemVouchers = "${baseUrl}redeem-voucher/";
   static const String changeProfile = "${baseUrl}change-profile/";
+  static const String joinEvent = "${baseUrl}add-participant/";
 }
