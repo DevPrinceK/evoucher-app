@@ -1,7 +1,11 @@
-import 'package:evoucher/components/btmNavBar.dart';
-import 'package:evoucher/components/profile_item.dart';
+// ignore_for_file: avoid_print
+
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:evoucher/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -11,6 +15,25 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +113,13 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 4),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 4)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 4,
+                )
+              : RestaurantNavBar(selectedIndex: 4),
     );
   }
 }
