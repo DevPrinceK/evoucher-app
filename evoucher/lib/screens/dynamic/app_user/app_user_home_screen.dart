@@ -32,6 +32,9 @@ class _AppUserStatsScreenState extends State<AppUserStatsScreen> {
   Future<int> getEvents(bool reload) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
+    final String? fullname = prefs.getString('fullname');
+    List<String> nameParts = fullname!.split(" ");
+    firstName = nameParts[0];
 
     var url = Uri.parse(APIEndpoints.allEvents);
     var response = await http.get(url, headers: {
