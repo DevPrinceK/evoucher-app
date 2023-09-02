@@ -1,5 +1,9 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RedeemVoucherScreen extends StatefulWidget {
   const RedeemVoucherScreen({super.key});
@@ -10,6 +14,20 @@ class RedeemVoucherScreen extends StatefulWidget {
 
 class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
   double get deviceWidth => MediaQuery.of(context).size.width;
+
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
   // show dialog
   Future<void> _showDialog() async {
     await showDialog(
@@ -30,6 +48,12 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
   }
 
   @override
@@ -99,7 +123,13 @@ class _RedeemVoucherScreenState extends State<RedeemVoucherScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 3),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 3)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 3,
+                )
+              : RestaurantNavBar(selectedIndex: 3),
     );
   }
 }
