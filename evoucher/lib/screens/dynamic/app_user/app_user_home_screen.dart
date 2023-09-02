@@ -196,7 +196,7 @@ class _AppUserStatsScreenState extends State<AppUserStatsScreen> {
                                     ),
                                     const Spacer(),
                                     Text(
-                                      event["points"].toString(),
+                                      event["participants"].length.toString(),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
