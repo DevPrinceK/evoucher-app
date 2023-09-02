@@ -1,4 +1,5 @@
-import 'package:evoucher/components/btmNavBar.dart';
+// ignore_for_file: avoid_print, non_constant_identifier_names
+
 import 'package:evoucher/components/event_item.dart';
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
