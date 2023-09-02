@@ -1,6 +1,10 @@
 import 'package:evoucher/components/btmNavBar.dart';
+import 'package:evoucher/components/navbar/app_user_navbar.dart';
+import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
+import 'package:evoucher/components/navbar/restaurant_navbar.dart';
 import 'package:evoucher/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileSettingsScreen extends StatefulWidget {
   const ProfileSettingsScreen({super.key});
@@ -10,6 +14,25 @@ class ProfileSettingsScreen extends StatefulWidget {
 }
 
 class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
+  String userRole = "APP_USER";
+  // Get the user role from shared preferences
+  Future<void> getUserRole() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? roleFromPrefs =
+        prefs.getString('role'); // Use a different variable name
+    print("Role Before setState(): $roleFromPrefs");
+    setState(() {
+      userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
+    });
+    print("Role After setState(): $userRole");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserRole();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +97,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text("Save Settings"),
+                  child: const Text("Save Settings"),
                   onPressed: () {},
                 ),
               ),
@@ -82,7 +105,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: CustomBottomNavBar(selectedIndex: 4),
+      bottomNavigationBar: userRole == "APP_USER"
+          ? AppUserNavBar(selectedIndex: 4)
+          : userRole == "ORGANIZER"
+              ? OrganazinerNavBar(
+                  selectedIndex: 4,
+                )
+              : RestaurantNavBar(selectedIndex: 4),
     );
   }
 }
