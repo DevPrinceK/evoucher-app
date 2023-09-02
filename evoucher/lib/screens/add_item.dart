@@ -136,6 +136,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   void initState() {
     super.initState();
     get_events();
+    getUserRole();
   }
 
   @override
@@ -340,12 +341,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ),
       ),
       bottomNavigationBar: userRole == "APP_USER"
-          ? AppUserNavBar(selectedIndex: 1)
+          ? AppUserNavBar(selectedIndex: 0)
           : userRole == "ORGANIZER"
-              ? OrganazinerNavBar(
+              ? const OrganazinerNavBar(
                   selectedIndex: 1,
                 )
-              : const RestaurantNavBar(selectedIndex: 1),
+              : const RestaurantNavBar(selectedIndex: 0),
     );
   }
 }
