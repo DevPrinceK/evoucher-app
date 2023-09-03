@@ -96,11 +96,11 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
-      body: const DefaultTabController(
+      body: DefaultTabController(
         length: 2,
         child: Column(
           children: [
-            TabBar(
+            const TabBar(
               indicatorColor: Colors.deepPurple,
               tabs: [
                 Tab(text: "Events"),
@@ -111,80 +111,50 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
               child: TabBarView(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         top: 5, bottom: 15, left: 15, right: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 15),
-                        Text(
+                        const SizedBox(height: 15),
+                        const Text(
                           "All Events",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 10),
-                        EventItemCard(
-                          eventName: "Graduation Night",
-                          date: '12/12/2021',
-                        ),
-                        SizedBox(height: 8),
-                        EventItemCard(
-                          eventName: "Dinner and Awards",
-                          date: '12/12/2021',
-                        ),
-                        SizedBox(height: 8),
-                        EventItemCard(
-                          eventName: "Leavers Service",
-                          date: '12/12/2021',
-                        ),
-                        SizedBox(height: 8),
-                        EventItemCard(
-                          eventName: "Hackathon Kickoff",
-                          date: '12/12/2021',
-                        ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 10),
+                        for (var event in allEvents)
+                          EventItemCard(
+                            eventName: event["name"],
+                            date: event["date"],
+                            eventCreator: event["created_by"]["fullname"],
+                            eventCreatorEmail: event["created_by"]["email"],
+                            eventID: event["event_id"],
+                          ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         top: 5, bottom: 15, left: 15, right: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 15),
-                        Text(
+                        const SizedBox(height: 15),
+                        const Text(
                           "All Vouchers",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 10),
-                        VoucherItemCard(
-                          eventName: 'Dinner and Awards',
-                          voucherID: 'EV#123456',
-                          voucherCreator: 'Fahd Mohammed',
-                          voucherDate: '2023-08-12',
-                        ),
-                        SizedBox(height: 8),
-                        VoucherItemCard(
-                          eventName: 'Dinner and Awards',
-                          voucherID: 'EV#123456',
-                          voucherCreator: 'Fahd Mohammed',
-                          voucherDate: '2023-08-12',
-                        ),
-                        SizedBox(height: 8),
-                        VoucherItemCard(
-                          eventName: 'Dinner and Awards',
-                          voucherID: 'EV#123456',
-                          voucherCreator: 'Fahd Mohammed',
-                          voucherDate: '2023-08-12',
-                        ),
-                        SizedBox(height: 8),
-                        VoucherItemCard(
-                          eventName: 'Dinner and Awards',
-                          voucherID: 'EV#123456',
-                          voucherCreator: 'Fahd Mohammed',
-                          voucherDate: '2023-08-12',
-                        ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 10),
+                        for (var voucher in allVouchers)
+                          VoucherItemCard(
+                            eventName: voucher["event"]["name"],
+                            voucherID: voucher["voucher_id"],
+                            voucherCreator: voucher["event"]["created_by"]
+                                ["fullname"],
+                            voucherDate: voucher["event"]["date"],
+                          ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   )
