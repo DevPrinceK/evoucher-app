@@ -150,7 +150,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ItemsListScreen(),
+                builder: (context) => const ItemsListScreen(),
               ),
             );
             return;
