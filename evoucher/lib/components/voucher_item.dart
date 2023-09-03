@@ -7,6 +7,8 @@ class VoucherItemCard extends StatelessWidget {
   final String voucherCreator;
   final String voucherDate;
   final String eventName;
+  final String voucherCreatorEmail;
+  final double voucherAmount;
   const VoucherItemCard({
     super.key,
     required this.voucherID,
@@ -14,6 +16,8 @@ class VoucherItemCard extends StatelessWidget {
     required this.voucherCreator,
     required this.voucherDate,
     required this.eventName,
+    this.voucherCreatorEmail = 'vouchercreator@gmail.com',
+    this.voucherAmount = 45.00,
   });
 
   @override
@@ -28,6 +32,8 @@ class VoucherItemCard extends StatelessWidget {
               voucherID: voucherID,
               voucherDate: voucherDate,
               voucherCreator: voucherCreator,
+              voucherCreatorEmail: voucherCreatorEmail,
+              voucherAmount: voucherAmount,
             ),
           ),
         );
