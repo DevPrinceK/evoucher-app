@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 class VoucherDetailScreen extends StatefulWidget {
   final String voucherName;
   final String voucherID;
+  final String eventID;
   final String voucherDate;
   final String voucherCreator;
   final String voucherCreatorEmail;
@@ -23,6 +24,7 @@ class VoucherDetailScreen extends StatefulWidget {
     required this.voucherID,
     required this.voucherDate,
     required this.voucherCreator,
+    this.eventID = '0',
     this.voucherAmount = 45.00,
     this.voucherCreatorEmail = "vouchercreator@gmail.com",
   });
@@ -67,14 +69,34 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
     return response.statusCode;
   }
 
+  // delete voucher
+  Future<int> broadcastVoucher(voucherId, eventId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.broadcastVoucher);
+    var response = await http.post(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "voucher_id": voucherId,
+      "event_id": eventId,
+    });
+    if (response.statusCode == 200) {
+      print("Voucher Broadcasted");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
+
   // show dialog
-  Future<void> _showSuccessDialog() async {
+  Future<void> _showSuccessDialog(message) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           elevation: 5,
-          title: const Text("Voucher Deleted!"),
+          title: Text(message),
           content: SizedBox(
             height: 300,
             width: deviceWidth * 0.8,
@@ -159,12 +181,20 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
         children: [
           FloatingActionButton(
             backgroundColor: Colors.green,
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Broadcasting Voucher ..."),
-                ),
+            onPressed: () async {
+              var res = await broadcastVoucher(
+                widget.voucherID,
+                widget.eventID,
               );
+              if (res == 200) {
+                _showSuccessDialog("Voucher Broadcasted!");
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Failed to broadcast voucher"),
+                  ),
+                );
+              }
             },
             child: const Icon(
               Icons.share_outlined,
@@ -177,12 +207,12 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
             onPressed: () async {
               var res = await deleteVoucher(widget.voucherID);
               if (res == 200) {
-                _showSuccessDialog();
+                _showSuccessDialog("Voucher Deleted!");
                 Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ItemsListScreen(),
+                    builder: (context) => const ItemsListScreen(),
                   ),
                 );
                 return;
