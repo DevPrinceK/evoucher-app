@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names
+// ignore_for_file: avoid_print, non_constant_identifier_names, must_be_immutable
 
 import 'package:evoucher/components/event_item.dart';
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
@@ -13,8 +13,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ItemsListScreen extends StatefulWidget {
-  int selectedIndex;
-  ItemsListScreen({super.key, this.selectedIndex = 0});
+  final int selectedIndex;
+  const ItemsListScreen({super.key, this.selectedIndex = 0});
 
   @override
   State<ItemsListScreen> createState() => _ItemsListScreenState();
@@ -151,6 +151,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                         for (var voucher in allVouchers)
                           VoucherItemCard(
                             eventName: voucher["event"]["name"],
+                            eventId: voucher["event"]["event_id"],
                             voucherID: voucher["voucher_id"],
                             voucherAmount: double.parse(voucher["amount"]),
                             voucherCreator: voucher["event"]["created_by"]
