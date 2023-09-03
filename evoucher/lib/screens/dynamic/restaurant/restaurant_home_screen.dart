@@ -3,6 +3,7 @@
 // ignore: unused_import
 import 'package:evoucher/consts/colors.dart';
 import 'package:evoucher/network/api_endpoints.dart';
+import 'package:evoucher/screens/withdraw_funds.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import http package and convert dart file
@@ -20,6 +21,8 @@ class RestaurantUserStatsScreen extends StatefulWidget {
 class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
   // get device width
   double get deviceWidth => MediaQuery.of(context).size.width;
+
+  double balance = 0.0;
 
   // firstname
   String firstName = "";
@@ -54,12 +57,19 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
 
     if (response.statusCode == 200) {
       print("Vouchers Fetched Successfully");
-      var data = jsonDecode(response.body)["vouchers"];
+      var data = jsonDecode(response.body);
+      var voucherData = data["vouchers"];
+      var userBalance = data["balance"];
+      print("Straight from the API");
+      print(voucherData);
+      print("Balance: $userBalance");
       setState(() {
-        allVouchers = data;
+        allVouchers = voucherData;
+        balance = userBalance;
       });
       print("all vouchers");
       print(allVouchers);
+      print("Balance: $balance");
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -85,50 +95,6 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
         );
       },
     );
-  }
-
-  // show dialog to credit account
-  Future<void> _showDialog() async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Add Funds"),
-            content: SizedBox(
-              width: deviceWidth * 0.8,
-              // ignore: prefer_const_constructors
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text("Enter Amount"),
-                  SizedBox(height: 10),
-                  SizedBox(height: 10),
-                  Text("Enter Card Number"),
-                  SizedBox(height: 10),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Card Number',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () async {},
-                child: const Text("Add"),
-              ),
-            ],
-          );
-        });
   }
 
   @override
@@ -163,6 +129,42 @@ class _RestaurantUserStatsScreenState extends State<RestaurantUserStatsScreen> {
                   const Text(
                     "Welcome to eVoucher",
                     style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50, right: 40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "\$ $balance",
+                          style: const TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Spacer(),
+                        SizedBox(
+                          height: 35,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const WithdrawFundScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text("Withdral Funds"),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
