@@ -15,6 +15,10 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  // user info
+  String _userEmail = "mohammedfahd@gmail.com";
+  String _userFullname = "Mohammed Fahd";
+
   String userRole = "APP_USER";
   // Get the user role from shared preferences
   Future<void> getUserRole() async {
@@ -28,10 +32,21 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     print("Role After setState(): $userRole");
   }
 
+  void getProfileInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? email = prefs.getString("email");
+    final String? fullname = prefs.getString("fullname");
+    setState(() {
+      _userEmail = email.toString();
+      _userFullname = fullname.toString();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getUserRole();
+    getProfileInfo();
   }
 
   @override
@@ -53,15 +68,22 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 child: Image.asset('assets/images/profile.png'),
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Fahd Mohammed",
-                style: TextStyle(
+              Text(
+                _userFullname,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              const Text(
-                "mohammedfahd@gmail.com",
+              Text(
+                _userEmail,
+              ),
+              Text(
+                userRole,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(height: 20),
               const Spacer(),
