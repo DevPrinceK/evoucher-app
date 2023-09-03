@@ -11,12 +11,14 @@ class EventDetailScreen extends StatefulWidget {
   final String eventID;
   final String eventDate;
   final String eventCreator;
+  final String eventCreatorEmail;
   const EventDetailScreen({
     super.key,
     required this.eventName,
     required this.eventID,
     required this.eventDate,
     required this.eventCreator,
+    this.eventCreatorEmail = "eventcreator@gmail.com",
   });
 
   @override
@@ -67,21 +69,21 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   ),
                   const SizedBox(height: 10),
                   const Text("Date"),
-                  const Text(
-                    "2023-08-30",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.eventDate,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Creator Name"),
-                  const Text(
-                    "Prince Samuel",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.eventCreator,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Creator Email"),
-                  const Text(
-                    "princesamuelpks@gmail.com",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.eventCreatorEmail,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                 ],
@@ -91,7 +93,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        // shape: const ShapeBorder(),
         backgroundColor: Colors.red,
         onPressed: () {},
         child: const Icon(
