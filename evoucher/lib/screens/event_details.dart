@@ -1,10 +1,14 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_print
+// ignore_for_file: sized_box_for_whitespace, avoid_print, use_build_context_synchronously
 
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
 import 'package:evoucher/components/navbar/restaurant_navbar.dart';
+import 'package:evoucher/network/api_endpoints.dart';
+import 'package:evoucher/screens/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import http package and convert dart file
+import 'package:http/http.dart' as http;
 
 class EventDetailScreen extends StatefulWidget {
   final String eventName;
@@ -27,6 +31,28 @@ class EventDetailScreen extends StatefulWidget {
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
   String userRole = "APP_USER";
+
+  get deviceWidth => MediaQuery.of(context).size.width;
+
+  // delete event
+  Future<int> deleteEvent(eventId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.events);
+    var response = await http.delete(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "event_id": eventId,
+    });
+    if (response.statusCode == 200) {
+      print("Event Deleted");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
+
   // Get the user role from shared preferences
   Future<void> getUserRole() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,6 +63,28 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
     });
     print("Role After setState(): $userRole");
+  }
+
+  // show dialog
+  Future<void> _showSuccessDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 5,
+          title: const Text("Event Deleted!"),
+          content: SizedBox(
+            height: 300,
+            width: deviceWidth * 0.8,
+            child: Column(
+              children: [
+                Image.asset("assets/images/success-check.png"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -94,7 +142,27 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {},
+        onPressed: () async {
+          var res = await deleteEvent(widget.eventID);
+          if (res == 200) {
+            _showSuccessDialog();
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItemsListScreen(),
+              ),
+            );
+            return;
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Failed to delete event"),
+              ),
+            );
+            return;
+          }
+        },
         child: const Icon(
           Icons.delete,
           color: Colors.white,
