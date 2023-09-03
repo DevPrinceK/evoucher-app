@@ -197,10 +197,10 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
       bottomNavigationBar: userRole == "APP_USER"
           ? AppUserNavBar(selectedIndex: 2)
           : userRole == "ORGANIZER"
-              ? OrganazinerNavBar(
+              ? const OrganazinerNavBar(
                   selectedIndex: 2,
                 )
-              : RestaurantNavBar(selectedIndex: 2),
+              : const RestaurantNavBar(selectedIndex: 2),
     );
   }
 }
