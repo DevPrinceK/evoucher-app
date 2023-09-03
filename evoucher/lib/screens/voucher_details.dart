@@ -11,12 +11,16 @@ class VoucherDetailScreen extends StatefulWidget {
   final String voucherID;
   final String voucherDate;
   final String voucherCreator;
+  final String voucherCreatorEmail;
+  final double voucherAmount;
   const VoucherDetailScreen({
     super.key,
     required this.voucherName,
     required this.voucherID,
     required this.voucherDate,
     required this.voucherCreator,
+    this.voucherAmount = 45.00,
+    this.voucherCreatorEmail = "vouchercreator@gmail.com",
   });
 
   @override
@@ -62,9 +66,9 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Voucher ID"),
-                  const Text(
-                    "EV202308191403",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.voucherID,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Event Name"),
@@ -74,27 +78,27 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
                   ),
                   const SizedBox(height: 10),
                   const Text("Amount"),
-                  const Text(
-                    "45.00",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.voucherAmount.toString(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Date"),
-                  const Text(
-                    "2023-08-30",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.voucherDate,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Creator Name"),
-                  const Text(
-                    "Prince Samuel",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.voucherCreator,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                   const Text("Creator Email"),
-                  const Text(
-                    "princesamuelpks@gmail.com",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    widget.voucherCreatorEmail,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
                 ],
