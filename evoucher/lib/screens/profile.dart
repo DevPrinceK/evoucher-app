@@ -125,40 +125,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
               const PrilfeItem(
                 title: "Profile Settings",
                 NavScreen: ProfileSettingsScreen(),
               ),
-
               userRole == "RESTAURANT" || userRole == "ORGANIZER"
                   ? const PrilfeItem(
                       title: "Withdraw Funds",
                       NavScreen: WithdrawFundScreen(),
                     )
                   : const SizedBox(height: 0),
-              // const PrilfeItem(
-              //   title: "Cash Withdrawal",
-              //   NavScreen: WithdrawFundScreen(),
-              // ),
-
               userRole == "ORGANIZER"
                   ? const PrilfeItem(
                       title: "Add Funds",
                       NavScreen: HomeScreen(),
                     )
                   : const SizedBox(height: 0),
-
-              // const PrilfeItem(
-              //   title: "Add Funds",
-              //   NavScreen: HomeScreen(),
-              // ),
-
               const PrilfeItem(
                 title: "Delete Account",
                 NavScreen: DeleteAccountScreen(),
               ),
-
               const Spacer(),
               SizedBox(
                 width: double.infinity,
