@@ -13,7 +13,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ItemsListScreen extends StatefulWidget {
-  const ItemsListScreen({super.key});
+  int selectedIndex;
+  ItemsListScreen({super.key, this.selectedIndex = 0});
 
   @override
   State<ItemsListScreen> createState() => _ItemsListScreenState();
@@ -97,6 +98,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
       ),
       body: DefaultTabController(
+        initialIndex: widget.selectedIndex,
         length: 2,
         child: Column(
           children: [
@@ -150,8 +152,11 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
                           VoucherItemCard(
                             eventName: voucher["event"]["name"],
                             voucherID: voucher["voucher_id"],
+                            voucherAmount: double.parse(voucher["amount"]),
                             voucherCreator: voucher["event"]["created_by"]
                                 ["fullname"],
+                            voucherCreatorEmail: voucher["event"]["created_by"]
+                                ["email"],
                             voucherDate: voucher["event"]["date"],
                           ),
                         const SizedBox(height: 8),
