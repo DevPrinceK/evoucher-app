@@ -1,10 +1,14 @@
-// ignore_for_file: sized_box_for_whitespace, avoid_print
+// ignore_for_file: sized_box_for_whitespace, avoid_print, use_build_context_synchronously
 
 import 'package:evoucher/components/navbar/app_user_navbar.dart';
 import 'package:evoucher/components/navbar/organizer_nav_bar.dart';
 import 'package:evoucher/components/navbar/restaurant_navbar.dart';
+import 'package:evoucher/network/api_endpoints.dart';
+import 'package:evoucher/screens/items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import http package and convert dart file
+import 'package:http/http.dart' as http;
 
 class VoucherDetailScreen extends StatefulWidget {
   final String voucherName;
@@ -30,6 +34,8 @@ class VoucherDetailScreen extends StatefulWidget {
 class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
   String userRole = "APP_USER";
 
+  get deviceWidth => MediaQuery.of(context).size.width;
+
   // Get the user role from shared preferences
   Future<void> getUserRole() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,6 +46,47 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
       userRole = roleFromPrefs ?? "APP_USER"; // Set the class-level userRole
     });
     print("Role After setState(): $userRole");
+  }
+
+  // delete voucher
+  Future<int> deleteVoucher(voucherId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    var url = Uri.parse(APIEndpoints.vouchers);
+    var response = await http.delete(url, headers: {
+      "Authorization": "Token ${token.toString()}",
+    }, body: {
+      "voucher_id": voucherId,
+    });
+    if (response.statusCode == 200) {
+      print("Voucher Deleted");
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
+    return response.statusCode;
+  }
+
+  // show dialog
+  Future<void> _showSuccessDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          elevation: 5,
+          title: const Text("Voucher Deleted!"),
+          content: SizedBox(
+            height: 300,
+            width: deviceWidth * 0.8,
+            child: Column(
+              children: [
+                Image.asset("assets/images/success-check.png"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -127,7 +174,27 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
           const SizedBox(height: 10),
           FloatingActionButton(
             backgroundColor: Colors.red,
-            onPressed: () {},
+            onPressed: () async {
+              var res = await deleteVoucher(widget.voucherID);
+              if (res == 200) {
+                _showSuccessDialog();
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ItemsListScreen(),
+                  ),
+                );
+                return;
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Failed to delete voucher"),
+                  ),
+                );
+                return;
+              }
+            },
             child: const Icon(
               Icons.delete,
               color: Colors.white,
@@ -138,10 +205,10 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
       bottomNavigationBar: userRole == "APP_USER"
           ? AppUserNavBar(selectedIndex: 0)
           : userRole == "ORGANIZER"
-              ? OrganazinerNavBar(
-                  selectedIndex: 0,
+              ? const OrganazinerNavBar(
+                  selectedIndex: 2,
                 )
-              : RestaurantNavBar(selectedIndex: 0),
+              : const RestaurantNavBar(selectedIndex: 0),
     );
   }
 }
