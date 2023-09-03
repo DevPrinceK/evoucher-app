@@ -1,7 +1,7 @@
 class APIEndpoints {
   // final String baseUrl = "https://api.evoucher.my/api-v1/";
-  static const String baseUrl = "http://192.168.137.1:8000/api-v1/"; //no vpn ip
-  // static const String baseUrl = "http://10.1.18.74:8000/api-v1/"; //vpn ip
+  // static const String baseUrl = "http://192.168.137.1:8000/api-v1/"; //no vpn ip
+  static const String baseUrl = "http://10.12.18.103:8000/api-v1/"; //vpn ip
   static const String login = "${baseUrl}login/";
   static const String signup = "${baseUrl}sign-up/";
   static const String logout = "${baseUrl}logout/";
@@ -15,4 +15,5 @@ class APIEndpoints {
   static const String redeemVouchers = "${baseUrl}redeem-voucher/";
   static const String changeProfile = "${baseUrl}change-profile/";
   static const String joinEvent = "${baseUrl}add-participant/";
+  static const String broadcastVoucher = "${baseUrl}broadcast-voucher/";
 }
