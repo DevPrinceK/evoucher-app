@@ -3,7 +3,7 @@ class APIEndpoints {
   // static const String baseUrl = "http://192.168.137.1:8000/api-v1/"; //no vpn ip
   // static const String baseUrl = "http://10.12.18.103:8000/api-v1/"; //vpn ip
   static const String baseUrl =
-      "http://159.223.204.68:8000/api-v1/"; // actual server ip - digital ocean
+      "http://159.223.204.68/api-v1/"; // actual server ip - digital ocean
   static const String login = "${baseUrl}login/";
   static const String signup = "${baseUrl}sign-up/";
   static const String logout = "${baseUrl}logout/";
