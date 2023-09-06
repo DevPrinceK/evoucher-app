@@ -96,6 +96,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
         title: const Text("Events and Vouchers"),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+        elevation: 0,
       ),
       body: DefaultTabController(
         initialIndex: widget.selectedIndex,
@@ -104,6 +105,7 @@ class _ItemsListScreenState extends State<ItemsListScreen> {
           children: [
             const TabBar(
               indicatorColor: Colors.deepPurple,
+              labelColor: Colors.black,
               tabs: [
                 Tab(text: "Events"),
                 Tab(text: "Vouchers"),
