@@ -113,6 +113,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         title: const Text("Profile Settings"),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
