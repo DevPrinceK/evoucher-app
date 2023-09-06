@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:evoucher/screens/dynamic/app_user/participant_vouchers.dart';
 import 'package:evoucher/screens/homescreen.dart';
 import 'package:evoucher/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,17 @@ class _AppUserNavBarState extends State<AppUserNavBar> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          },
+        ),
+        InkWell(
+          child: const Icon(Icons.list, size: 30),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ParticipantVouchers(),
+              ),
             );
           },
         ),
