@@ -291,20 +291,23 @@ class _StatsScreenState extends State<StatsScreen> {
                       icon: Icons.public_sharp,
                       fullWidth: true,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StatCard(
-                          title: "SILVER",
-                          total: createdData["silver"].toString(),
-                          icon: Icons.accessibility,
-                        ),
-                        StatCard(
-                          title: "GOLD",
-                          total: createdData["gold"].toString(),
-                          icon: Icons.gpp_good_outlined,
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          StatCard(
+                            title: "SILVER",
+                            total: createdData["silver"].toString(),
+                            icon: Icons.accessibility,
+                          ),
+                          StatCard(
+                            title: "GOLD",
+                            total: createdData["gold"].toString(),
+                            icon: Icons.gpp_good_outlined,
+                          ),
+                        ],
+                      ),
                     ),
                     StatCard(
                       title: "DIAMOND",
