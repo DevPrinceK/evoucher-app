@@ -40,7 +40,7 @@ class _ParticipantVouchersState extends State<ParticipantVouchers> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? token = prefs.getString('token');
 
-    var url = Uri.parse(APIEndpoints.allVouchers);
+    var url = Uri.parse(APIEndpoints.broadcastVoucher);
     var response = await http.get(url, headers: {
       "Authorization": "Token ${token.toString()}",
     });
@@ -89,14 +89,15 @@ class _ParticipantVouchersState extends State<ParticipantVouchers> {
                 const SizedBox(height: 10),
                 for (var voucher in allVouchers)
                   VoucherItemCard(
-                    eventName: voucher["event"]["name"],
-                    eventId: voucher["event"]["event_id"],
-                    voucherID: voucher["voucher_id"],
-                    voucherAmount: double.parse(voucher["amount"]),
-                    voucherCreator: voucher["event"]["created_by"]["fullname"],
-                    voucherCreatorEmail: voucher["event"]["created_by"]
-                        ["email"],
-                    voucherDate: voucher["event"]["date"],
+                    eventName: voucher["voucher"]["event"]["name"],
+                    eventId: voucher["voucher"]["event"]["event_id"],
+                    voucherID: voucher["voucher"]["voucher_id"],
+                    voucherAmount: double.parse(voucher["voucher"]["amount"]),
+                    voucherCreator: voucher["voucher"]["event"]["created_by"]
+                        ["fullname"],
+                    voucherCreatorEmail: voucher["voucher"]["event"]
+                        ["created_by"]["email"],
+                    voucherDate: voucher["voucher"]["event"]["date"],
                   ),
                 const SizedBox(height: 8),
               ],
