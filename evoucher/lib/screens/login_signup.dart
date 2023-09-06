@@ -25,7 +25,9 @@ class LoginSignUpScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).primaryColor,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           elevation: 0,
         ),
