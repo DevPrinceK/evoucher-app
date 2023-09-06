@@ -2,6 +2,7 @@
 
 import 'package:evoucher/network/api_endpoints.dart';
 import 'package:evoucher/screens/homescreen.dart';
+import 'package:evoucher/screens/login_signup.dart';
 import 'package:flutter/material.dart';
 // import http package and convert dart file
 import 'package:http/http.dart' as http;
@@ -438,13 +439,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
-                  onPressed: () {
-                    _showBottomSheet(context, 1);
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color.fromARGB(255, 158, 242, 160)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromRGBO(0, 255, 0, 0.4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
+                  onPressed: () {
+                    // _showBottomSheet(context, 1);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginSignUpScreen(indx: 1),
+                      ),
+                    );
+                  },
+                  // style: ButtonStyle(
+                  //   backgroundColor: MaterialStateProperty.all<Color>(
+                  //       const Color.fromARGB(255, 158, 242, 160)),
+                  // ),
                   child: const Text("Sign Up", style: TextStyle(fontSize: 20)),
                 ),
               ),
@@ -453,10 +466,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: double.infinity,
                 height: 60,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    // backgroundColor: const Color.fromARGB(200, 255, 0, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   onPressed: () {
-                    _showBottomSheet(context, 0);
+                    // _showBottomSheet(context, 0);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginSignUpScreen(indx: 0),
+                      ),
+                    );
                   },
-                  style: const ButtonStyle(),
                   child: const Text("Login", style: TextStyle(fontSize: 20)),
                 ),
               ),
