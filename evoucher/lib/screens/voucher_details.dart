@@ -176,64 +176,66 @@ class _VoucherDetailScreenState extends State<VoucherDetailScreen> {
           ),
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            backgroundColor: Colors.green,
-            onPressed: () async {
-              var res = await broadcastVoucher(
-                widget.voucherID,
-                widget.eventID,
-              );
-              if (res == 200) {
-                _showSuccessDialog("Voucher Broadcasted!");
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Failed to broadcast voucher"),
+      floatingActionButton: userRole == "APP_USER"
+          ? null
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  backgroundColor: Colors.green,
+                  onPressed: () async {
+                    var res = await broadcastVoucher(
+                      widget.voucherID,
+                      widget.eventID,
+                    );
+                    if (res == 200) {
+                      _showSuccessDialog("Voucher Broadcasted!");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Failed to broadcast voucher"),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Icon(
+                    Icons.share_outlined,
+                    color: Colors.white,
                   ),
-                );
-              }
-            },
-            child: const Icon(
-              Icons.share_outlined,
-              color: Colors.white,
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  backgroundColor: Colors.red,
+                  onPressed: () async {
+                    var res = await deleteVoucher(widget.voucherID);
+                    if (res == 200) {
+                      _showSuccessDialog("Voucher Deleted!");
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ItemsListScreen(),
+                        ),
+                      );
+                      return;
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Failed to delete voucher"),
+                        ),
+                      );
+                      return;
+                    }
+                  },
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton(
-            backgroundColor: Colors.red,
-            onPressed: () async {
-              var res = await deleteVoucher(widget.voucherID);
-              if (res == 200) {
-                _showSuccessDialog("Voucher Deleted!");
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ItemsListScreen(),
-                  ),
-                );
-                return;
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Failed to delete voucher"),
-                  ),
-                );
-                return;
-              }
-            },
-            child: const Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
       bottomNavigationBar: userRole == "APP_USER"
-          ? AppUserNavBar(selectedIndex: 0)
+          ? AppUserNavBar(selectedIndex: 1)
           : userRole == "ORGANIZER"
               ? const OrganazinerNavBar(
                   selectedIndex: 2,
