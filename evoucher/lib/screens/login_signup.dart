@@ -62,53 +62,118 @@ class _BodyState extends State<Body> {
   String role = "APP_USER";
   bool invalidEmailPassword = false;
 
-  // Make API call to login
-  Future<int> _login(email, passowrd) async {
+  Future<int> _login(email, password) async {
     // start loading
     setState(() {
       isLoginLoading = true;
     });
+
     // initialize shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Make API call
-    var url = Uri.parse(APIEndpoints.login);
-    var response = await http.post(
-      url,
-      body: {
-        "username": _emailController.text,
-        "password": _passwordController.text,
-      },
-    );
+    try {
+      // Make API call
+      var url = Uri.parse(APIEndpoints.login);
+      var response = await http.post(
+        url,
+        body: {
+          "username": _emailController.text,
+          "password": _passwordController.text,
+        },
+      );
 
-    // stop loading
-    setState(() {
-      isLoginLoading = false;
-    });
+      // stop loading
+      setState(() {
+        isLoginLoading = false;
+      });
 
-    if (response.statusCode == 200) {
-      // Login successful
-      print("Login successful");
-      var data = jsonDecode(response.body);
-      var userData = data["user"];
-      var token = data["token"];
-      print(userData);
-      print(token);
-      // Save token and user info
-      await prefs.setString("token", data["token"]);
-      await prefs.setString("fullname", userData["fullname"]);
-      await prefs.setString("email", userData["email"]);
-      await prefs.setString("role", userData["role"]);
-      print(response.statusCode);
-      return response.statusCode;
-    } else {
-      // Login failed
-      print("Login failed");
-      print(response.statusCode);
-      print(response.reasonPhrase);
-      return response.statusCode;
+      if (response.statusCode == 200) {
+        // Login successful
+        print("Login successful");
+        var data = jsonDecode(response.body);
+        var userData = data["user"];
+        var token = data["token"];
+        print(userData);
+        print(token);
+        // Save token and user info
+        await prefs.setString("token", data["token"]);
+        await prefs.setString("fullname", userData["fullname"]);
+        await prefs.setString("email", userData["email"]);
+        await prefs.setString("role", userData["role"]);
+        print(response.statusCode);
+        return response.statusCode;
+      } else {
+        // Login failed
+        print("Login failed");
+        print(response.statusCode);
+        print(response.reasonPhrase);
+        return response.statusCode;
+      }
+    } catch (e) {
+      // Handle exceptions by displaying a Snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("An error occurred: $e"),
+        ),
+      );
+
+      // Stop loading
+      setState(() {
+        isLoginLoading = false;
+      });
+
+      // Return an error code or handle it as needed
+      return -1; // You can return a custom error code or value
     }
   }
+
+  // Make API call to login
+  // Future<int> _login(email, passowrd) async {
+  //   // start loading
+  //   setState(() {
+  //     isLoginLoading = true;
+  //   });
+  //   // initialize shared preferences
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  //   // Make API call
+  //   var url = Uri.parse(APIEndpoints.login);
+  //   var response = await http.post(
+  //     url,
+  //     body: {
+  //       "username": _emailController.text,
+  //       "password": _passwordController.text,
+  //     },
+  //   );
+
+  //   // stop loading
+  //   setState(() {
+  //     isLoginLoading = false;
+  //   });
+
+  //   if (response.statusCode == 200) {
+  //     // Login successful
+  //     print("Login successful");
+  //     var data = jsonDecode(response.body);
+  //     var userData = data["user"];
+  //     var token = data["token"];
+  //     print(userData);
+  //     print(token);
+  //     // Save token and user info
+  //     await prefs.setString("token", data["token"]);
+  //     await prefs.setString("fullname", userData["fullname"]);
+  //     await prefs.setString("email", userData["email"]);
+  //     await prefs.setString("role", userData["role"]);
+  //     print(response.statusCode);
+  //     return response.statusCode;
+  //   } else {
+  //     // Login failed
+  //     print("Login failed");
+  //     print(response.statusCode);
+  //     print(response.reasonPhrase);
+  //     return response.statusCode;
+  //   }
+  // }
 
   // signup user
   Future<int> _signUpUser(fullname, email, passowrd, role) async {
@@ -160,28 +225,6 @@ class _BodyState extends State<Body> {
   }
 
   // show dialog
-  // Future<void> _showSuccessDialog() async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         elevation: 5,
-  //         title: const Text("Successful"),
-  //         content: SizedBox(
-  //           height: 300,
-  //           width: deviceWidth * 0.8,
-  //           child: Column(
-  //             children: [
-  //               Image.asset("assets/images/success-check.png"),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // show dialog
   Future<void> _showErrorDialog() async {
     await showDialog(
       context: context,
@@ -219,20 +262,12 @@ class _BodyState extends State<Body> {
         children: [
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Center(
                   child: Image.asset(
                 'assets/images/evoucher-logo.png',
                 height: 100,
               )),
-              // child: Text(
-              //   'LOGIN',
-              //   style: TextStyle(
-              //     fontSize: 30,
-              //     fontWeight: FontWeight.bold,
-              //     color: Colors.white,
-              //   ),
-              // ),
             ),
           ),
           Container(
@@ -314,7 +349,6 @@ class _BodyState extends State<Body> {
                                   height: 50,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      // backgroundColor: const Color.fromRGBO(0, 255, 0, 0.4),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -355,15 +389,6 @@ class _BodyState extends State<Body> {
                                           invalidEmailPassword = true;
                                         });
                                         _showErrorDialog();
-                                        // snackbar
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(
-                                        //   const SnackBar(
-                                        //     content: Text(
-                                        //         "Invalid Email or Password"),
-                                        //     behavior: SnackBarBehavior.floating,
-                                        //   ),
-                                        // );
                                       }
                                     },
                                     child: isLoginLoading
