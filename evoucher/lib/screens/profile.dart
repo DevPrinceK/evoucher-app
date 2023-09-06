@@ -95,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text("Profile"),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+        elevation: 0,
       ),
       body: Center(
         child: Padding(
