@@ -56,6 +56,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         title: const Text("Delete Account"),
         centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+        elevation: 0,
       ),
       body: Center(
         child: Padding(
