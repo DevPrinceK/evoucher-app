@@ -203,7 +203,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
         ),
       ),
       bottomNavigationBar: userRole == "APP_USER"
-          ? AppUserNavBar(selectedIndex: 1)
+          ? AppUserNavBar(selectedIndex: 2)
           : userRole == "ORGANIZER"
               ? const OrganazinerNavBar(
                   selectedIndex: 3,
