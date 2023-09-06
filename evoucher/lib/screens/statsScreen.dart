@@ -213,10 +213,11 @@ class _StatsScreenState extends State<StatsScreen> {
                   "Welcome to eVoucher",
                   style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.only(left: 50, right: 40),
+                  padding: const EdgeInsets.only(left: 50, right: 50),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
                         "\$ $balance",
@@ -225,13 +226,15 @@ class _StatsScreenState extends State<StatsScreen> {
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
-                      const Spacer(),
+                      // const Spacer(),
                       SizedBox(
                         height: 35,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             // backgroundColor:
                             //     const Color.fromARGB(255, 0x32, 0xB7, 0x68),
+                            backgroundColor:
+                                const Color.fromRGBO(255, 255, 255, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -240,7 +243,10 @@ class _StatsScreenState extends State<StatsScreen> {
                             // display an alert dialog with two textinput field to add funds
                             _showDialog();
                           },
-                          child: const Text("+ Add Funds"),
+                          child: const Text(
+                            "+ Add Funds",
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       )
                     ],
