@@ -127,54 +127,6 @@ class _BodyState extends State<Body> {
     }
   }
 
-  // Make API call to login
-  // Future<int> _login(email, passowrd) async {
-  //   // start loading
-  //   setState(() {
-  //     isLoginLoading = true;
-  //   });
-  //   // initialize shared preferences
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  //   // Make API call
-  //   var url = Uri.parse(APIEndpoints.login);
-  //   var response = await http.post(
-  //     url,
-  //     body: {
-  //       "username": _emailController.text,
-  //       "password": _passwordController.text,
-  //     },
-  //   );
-
-  //   // stop loading
-  //   setState(() {
-  //     isLoginLoading = false;
-  //   });
-
-  //   if (response.statusCode == 200) {
-  //     // Login successful
-  //     print("Login successful");
-  //     var data = jsonDecode(response.body);
-  //     var userData = data["user"];
-  //     var token = data["token"];
-  //     print(userData);
-  //     print(token);
-  //     // Save token and user info
-  //     await prefs.setString("token", data["token"]);
-  //     await prefs.setString("fullname", userData["fullname"]);
-  //     await prefs.setString("email", userData["email"]);
-  //     await prefs.setString("role", userData["role"]);
-  //     print(response.statusCode);
-  //     return response.statusCode;
-  //   } else {
-  //     // Login failed
-  //     print("Login failed");
-  //     print(response.statusCode);
-  //     print(response.reasonPhrase);
-  //     return response.statusCode;
-  //   }
-  // }
-
   // signup user
   Future<int> _signUpUser(fullname, email, passowrd, role) async {
     // start loading
